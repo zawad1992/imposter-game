@@ -225,14 +225,6 @@ sort($categories);
 
 </div><!-- /.page-wrapper -->
 
-<!-- iOS Add-to-Home-Screen banner (shown only on iOS Safari, not installed) -->
-<div id="iosInstallBanner" role="status" aria-live="polite">
-  <button class="ios-banner-close" id="iosInstallClose" aria-label="Dismiss">&times;</button>
-  <div class="ios-banner-title">📲 Add to Home Screen</div>
-  <div class="ios-banner-text">
-    Tap <strong>Share</strong> <span style="font-size:1.1em;">⎙</span> then <strong>"Add to Home Screen"</strong> to install this game as an app.
-  </div>
-</div>
 
 <!-- jQuery + Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
