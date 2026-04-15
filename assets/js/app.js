@@ -54,18 +54,6 @@ $(document).ready(function () {
     });
   });
 
-  // iOS Safari: no beforeinstallprompt — show Add-to-Home-Screen banner instead
-  var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  var isInStandaloneMode = window.navigator.standalone === true;
-  var dismissed = localStorage.getItem('ig-ios-banner-dismissed');
-  if (isIos && !isInStandaloneMode && !dismissed) {
-    setTimeout(function () { $('#iosInstallBanner').fadeIn(400); }, 1500);
-  }
-
-  $(document).on('click', '#iosInstallClose', function () {
-    $('#iosInstallBanner').fadeOut(300);
-    localStorage.setItem('ig-ios-banner-dismissed', '1');
-  });
 });
 
 
