@@ -24,22 +24,27 @@
 
 
 /* ============================================================
-   1b. PWA – Install Prompt
+   1b. PWA – Install Prompt (Android/Desktop Chrome/Edge)
+       + iOS Add-to-Home-Screen banner
    ============================================================ */
 var _deferredInstallPrompt = null;
 
+// Capture the browser's native install prompt (Chrome/Edge)
 window.addEventListener('beforeinstallprompt', function (e) {
   e.preventDefault();
   _deferredInstallPrompt = e;
-  $('#btnInstallApp').fadeIn(300);
+  // Show install button once jQuery is ready
+  $(function () { $('#btnInstallApp').fadeIn(300); });
 });
 
 window.addEventListener('appinstalled', function () {
   _deferredInstallPrompt = null;
   $('#btnInstallApp').hide();
+  localStorage.setItem('ig-pwa-installed', '1');
 });
 
 $(document).ready(function () {
+  // Wire up the install button
   $(document).on('click', '#btnInstallApp', function () {
     if (!_deferredInstallPrompt) return;
     _deferredInstallPrompt.prompt();
@@ -47,6 +52,19 @@ $(document).ready(function () {
       _deferredInstallPrompt = null;
       $('#btnInstallApp').hide();
     });
+  });
+
+  // iOS Safari: no beforeinstallprompt — show Add-to-Home-Screen banner instead
+  var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isInStandaloneMode = window.navigator.standalone === true;
+  var dismissed = localStorage.getItem('ig-ios-banner-dismissed');
+  if (isIos && !isInStandaloneMode && !dismissed) {
+    setTimeout(function () { $('#iosInstallBanner').fadeIn(400); }, 1500);
+  }
+
+  $(document).on('click', '#iosInstallClose', function () {
+    $('#iosInstallBanner').fadeOut(300);
+    localStorage.setItem('ig-ios-banner-dismissed', '1');
   });
 });
 

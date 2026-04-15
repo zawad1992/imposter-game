@@ -45,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Pick a random word
                 $selected = $filtered[array_rand($filtered)];
 
-                // All-imposters chaos mode
-                $allImposters  = isset($_POST['all_imposters']) && $_POST['all_imposters'] === '1';
+                // All-imposters chaos mode — random 1-in-10 chance, no one knows in advance
+                $allImposters  = (random_int(1, 10) === 1);
 
                 // Randomly pick one imposter (or -1 for all-imposters mode)
                 $imposterIndex = $allImposters ? -1 : random_int(0, $playerCount - 1);
@@ -192,18 +192,6 @@ sort($categories);
 
         <div class="ig-divider"></div>
 
-        <!-- All Imposters mode -->
-        <div class="mb-4">
-          <label class="ig-toggle-wrap" for="allImpostersToggle">
-            <span class="ig-toggle">
-              <input type="checkbox" id="allImpostersToggle" name="all_imposters" value="1">
-              <span class="ig-toggle-slider"></span>
-            </span>
-            <span class="ig-toggle-label">😈 All are Imposters <span class="text-muted-ig fw-normal" style="font-size:0.82rem;">(chaos mode!)</span></span>
-          </label>
-          <p class="text-muted-ig mt-1 mb-0" style="font-size:0.82rem; padding-left:3.75rem;">Everyone is an imposter — nobody knows the word!</p>
-        </div>
-
         <!-- Next → -->
         <button type="button" id="btnNextStep" class="btn-ig-primary mt-2">
           Next → Enter Player Names
@@ -235,6 +223,15 @@ sort($categories);
   </p>
 
 </div><!-- /.page-wrapper -->
+
+<!-- iOS Add-to-Home-Screen banner (shown only on iOS Safari, not installed) -->
+<div id="iosInstallBanner" role="status" aria-live="polite">
+  <button class="ios-banner-close" id="iosInstallClose" aria-label="Dismiss">&times;</button>
+  <div class="ios-banner-title">📲 Add to Home Screen</div>
+  <div class="ios-banner-text">
+    Tap <strong>Share</strong> <span style="font-size:1.1em;">⎙</span> then <strong>"Add to Home Screen"</strong> to install this game as an app.
+  </div>
+</div>
 
 <!-- jQuery + Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
