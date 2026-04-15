@@ -24,6 +24,34 @@
 
 
 /* ============================================================
+   1b. PWA – Install Prompt
+   ============================================================ */
+var _deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', function (e) {
+  e.preventDefault();
+  _deferredInstallPrompt = e;
+  $('#btnInstallApp').fadeIn(300);
+});
+
+window.addEventListener('appinstalled', function () {
+  _deferredInstallPrompt = null;
+  $('#btnInstallApp').hide();
+});
+
+$(document).ready(function () {
+  $(document).on('click', '#btnInstallApp', function () {
+    if (!_deferredInstallPrompt) return;
+    _deferredInstallPrompt.prompt();
+    _deferredInstallPrompt.userChoice.then(function () {
+      _deferredInstallPrompt = null;
+      $('#btnInstallApp').hide();
+    });
+  });
+});
+
+
+/* ============================================================
    2. Dark Mode Toggle
    ============================================================ */
 (function initDarkMode() {

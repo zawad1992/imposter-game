@@ -45,8 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Pick a random word
                 $selected = $filtered[array_rand($filtered)];
 
-                // Randomly pick one imposter
-                $imposterIndex = random_int(0, $playerCount - 1);
+                // All-imposters chaos mode
+                $allImposters  = isset($_POST['all_imposters']) && $_POST['all_imposters'] === '1';
+
+                // Randomly pick one imposter (or -1 for all-imposters mode)
+                $imposterIndex = $allImposters ? -1 : random_int(0, $playerCount - 1);
 
                 // Create ordered player list and optionally shuffle it
                 $players = range(1, $playerCount);
@@ -65,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'players'       => $players,
                     'player_count'  => $playerCount,
                     'player_names'  => $playerNames,
+                    'all_imposters' => $allImposters,
                     'imposter_index'=> $imposterIndex,
                     'word'          => $selected['word'],
                     'category'      => $selected['category'],
@@ -113,7 +117,10 @@ sort($categories);
   <!-- Header row -->
   <div class="ig-header anim-fade-up">
     <span class="game-title">imposter</span>
-    <button id="darkToggle" class="dark-toggle" title="Toggle theme" aria-label="Toggle dark/light mode">☀️</button>
+    <div class="d-flex align-items-center gap-2">
+      <button id="btnInstallApp" style="display:none;" aria-label="Install app">📲 Install</button>
+      <button id="darkToggle" class="dark-toggle" title="Toggle theme" aria-label="Toggle dark/light mode">☀️</button>
+    </div>
   </div>
 
   <!-- Main setup card -->
@@ -181,6 +188,20 @@ sort($categories);
               <option value="180">3 minutes</option>
             </select>
           </div>
+        </div>
+
+        <div class="ig-divider"></div>
+
+        <!-- All Imposters mode -->
+        <div class="mb-4">
+          <label class="ig-toggle-wrap" for="allImpostersToggle">
+            <span class="ig-toggle">
+              <input type="checkbox" id="allImpostersToggle" name="all_imposters" value="1">
+              <span class="ig-toggle-slider"></span>
+            </span>
+            <span class="ig-toggle-label">😈 All are Imposters <span class="text-muted-ig fw-normal" style="font-size:0.82rem;">(chaos mode!)</span></span>
+          </label>
+          <p class="text-muted-ig mt-1 mb-0" style="font-size:0.82rem; padding-left:3.75rem;">Everyone is an imposter — nobody knows the word!</p>
         </div>
 
         <!-- Next → -->

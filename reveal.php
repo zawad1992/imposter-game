@@ -48,11 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 }
 
 /* ── Determine role for current player ──────────────────────── */
-$isImposter  = ($currentSlot === $game['imposter_index']);
-$playerNum   = $currentSlot + 1; // 1-based display
-$playerName  = htmlspecialchars($game['player_names'][$currentSlot] ?? ('Player ' . $playerNum), ENT_QUOTES, 'UTF-8');
-$word        = $game['word'];
-$category    = $game['category'];
+$allImposters = !empty($game['all_imposters']);
+$isImposter   = $allImposters || ($currentSlot === $game['imposter_index']);
+$playerNum    = $currentSlot + 1; // 1-based display
+$playerName   = htmlspecialchars($game['player_names'][$currentSlot] ?? ('Player ' . $playerNum), ENT_QUOTES, 'UTF-8');
+$word         = $game['word'];
+$category     = $game['category'];
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">

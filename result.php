@@ -19,6 +19,7 @@ if (empty($_SESSION['game'])) {
 $game         = &$_SESSION['game'];
 $totalPlayers = (int)$game['player_count'];
 $imposterIdx  = (int)$game['imposter_index'];
+$allImposters = !empty($game['all_imposters']);
 $word         = $game['word'];
 $category     = $game['category'];
 
@@ -167,7 +168,11 @@ if ($allVoted) {
     ?>
 
     <div id="resultsSection" class="text-center anim-fade-up">
-      <?php if ($wasCorrect): ?>
+      <?php if ($allImposters): ?>
+        <div style="font-size:3.5rem;">🤯</div>
+        <h2 class="fw-900 mb-1" style="font-size:1.8rem; color:var(--ig-accent);">Plot Twist!</h2>
+        <p class="text-muted-ig mb-3">Everyone was an imposter all along! Nobody had the word. 😂</p>
+      <?php elseif ($wasCorrect): ?>
         <div style="font-size:3.5rem;">🎉</div>
         <h2 class="fw-900 mb-1 text-success" style="font-size:1.8rem;">Town Wins!</h2>
         <p class="text-muted-ig mb-3">The group correctly identified the imposter.</p>
@@ -191,10 +196,15 @@ if ($allVoted) {
 
     <!-- Imposter reveal -->
     <div class="text-center mb-3">
-      <p class="section-label mb-1">The imposter was</p>
-      <div class="fw-900" style="font-size:1.5rem;">
-        <?= htmlspecialchars($game['player_names'][$imposterIdx] ?? ('Player ' . ($imposterIdx + 1)), ENT_QUOTES, 'UTF-8') ?> 😈
-      </div>
+      <?php if ($allImposters): ?>
+        <p class="section-label mb-1">The twist</p>
+        <div class="fw-900" style="font-size:1.4rem;">😈 Everyone was the imposter!</div>
+      <?php else: ?>
+        <p class="section-label mb-1">The imposter was</p>
+        <div class="fw-900" style="font-size:1.5rem;">
+          <?= htmlspecialchars($game['player_names'][$imposterIdx] ?? ('Player ' . ($imposterIdx + 1)), ENT_QUOTES, 'UTF-8') ?> 😈
+        </div>
+      <?php endif; ?>
     </div>
 
     <div class="ig-divider"></div>
@@ -211,7 +221,7 @@ if ($allVoted) {
       <div class="result-bar-label">
         <span class="fw-700">
           <?= htmlspecialchars($game['player_names'][$i] ?? ('Player ' . ($i + 1)), ENT_QUOTES, 'UTF-8') ?>
-          <?= $i === $imposterIdx ? ' 😈' : '' ?>
+          <?= (!$allImposters && $i === $imposterIdx) ? ' 😈' : '' ?>
         </span>
         <span><?= $tally[$i] ?> vote<?= $tally[$i] !== 1 ? 's' : '' ?></span>
       </div>
