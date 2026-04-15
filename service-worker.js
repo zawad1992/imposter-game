@@ -3,7 +3,7 @@
  * Caches static assets and provides offline fallback
  */
 
-const CACHE_NAME = 'imposter-game-v2';
+const CACHE_NAME = 'imposter-game-v3';
 const OFFLINE_URL = 'index.php';
 
 // Static assets to pre-cache on install (no PHP pages – they are always network-fetched)
@@ -43,6 +43,9 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   // Only handle GET requests
   if (event.request.method !== 'GET') return;
+
+  // Skip chrome-extension and non-http(s) requests
+  if (!event.request.url.startsWith('http')) return;
 
   const url = new URL(event.request.url);
   const isPhpPage = url.pathname.endsWith('.php') || url.pathname === '/';
